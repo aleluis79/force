@@ -30,7 +30,13 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 /home/alejandro/godot/Godot_v4.7.2-stable_linux.x86_64 --path .
 ```
 
-La escena actual es `scenes/bootstrap.tscn`, un placeholder visual sin gameplay.
+La escena principal es `scenes/debug_session.tscn`. Muestra el estado de la sesión, las vidas y la puntuación, y permite probar el bucle sin gameplay:
+
+- **Esc** pausa o reanuda la sesión.
+- **R** reinicia la partida con 3 vidas y 0 puntos.
+- Botones **Lose life**, **Add 100** y **Restart** para simular eventos.
+
+`scenes/bootstrap.tscn` se conserva como fixture del smoke test de la fundación.
 
 ## Ejecutar la puerta de calidad
 
@@ -124,4 +130,5 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] `InputMap` inicial para teclado, ratón y gamepad.
 - [x] Guardia de aislamiento de `src/core`.
 - [x] Smoke test de arranque.
+- [x] Bucle de sesión: estados, vidas, puntuación, pausa y reinicio.
 - [ ] Gameplay del vertical slice (siguientes changes).

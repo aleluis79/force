@@ -82,9 +82,9 @@ func test_physics_runs_at_60_ticks() -> void:
 	)
 
 
-func test_main_scene_is_bootstrap() -> void:
+func test_main_scene_is_debug_session() -> void:
 	assert_eq(
 		ProjectSettings.get_setting("application/run/main_scene"),
-		"res://scenes/bootstrap.tscn",
-		"main scene must be the bootstrap scene"
+		"res://scenes/debug_session.tscn",
+		"main scene must be the debug session scene"
 	)
