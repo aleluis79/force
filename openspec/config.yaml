@@ -1,0 +1,34 @@
+schema: spec-driven
+
+context: |
+  Proyecto Force: run-and-gun arcade 2D pixel art estilo Broforce, desarrollado en Godot 4.7.2 con GDScript tipado.
+  Specs y documentación en español; identificadores de código y nombres de tests en inglés.
+  Resolución interna 480x270, tiles de arte de 16 px y celdas de destrucción de 8 px.
+  Lógica de juego pura en src/core, sin dependencias de nodos, Input global, autoloads, reloj de pared ni RNG global.
+  Cada incremento sigue OpenSpec (proposal, specs, design, tasks) y cada task se implementa con TDD: test rojo antes de la implementación.
+  La puerta de calidad local es ./scripts/test.sh (GUT headless + openspec validate --all --strict).
+
+rules:
+  proposal:
+    - Mantener el alcance del vertical slice y declarar explícitamente lo que queda fuera de alcance.
+    - No proponer gameplay sin un escenario de spec asociado.
+  specs:
+    - Escribir las specs en español y usar DEBE (MUST) para requisitos normativos.
+    - Cada requirement debe tener al menos un escenario Given/When/Then con nombre estable.
+    - Evitar nombres de clases, funciones o librerías en la spec; describir comportamiento observable.
+  design:
+    - Justificar cada decisión técnica con al menos una alternativa considerada.
+    - Documentar riesgos y mitigaciones.
+  tasks:
+    - Máximo ~2 horas por task.
+    - Cada task debe indicar cómo verificarse y referenciar el escenario de spec que cubre.
+    - Ordenar las tasks para que el test se escriba antes de la implementación.
+
+operations:
+  apply:
+    guidance:
+      - Ejecutar ./scripts/test.sh al cerrar cada grupo de tasks y antes de archivar.
+      - No marcar una task como completa si su test no cubre el escenario correspondiente.
+  archive:
+    guidance:
+      - Resumir el resultado del change antes de sincronizar las specs principales.
