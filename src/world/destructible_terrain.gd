@@ -15,6 +15,10 @@ const GROUND_ROWS := 6
 const PLATFORM_RECT := Rect2i(22, 22, 14, 2)
 
 var grid: TerrainGrid
+var width := WIDTH
+var height := HEIGHT
+var ground_rows := GROUND_ROWS
+var platforms: Array[Rect2i] = [PLATFORM_RECT]
 
 
 func _ready() -> void:
@@ -32,6 +36,21 @@ func is_solid_at_world(world_position: Vector2) -> bool:
 		floori(world_position.y / float(TILE_SIZE))
 	)
 	return grid.is_solid(cell)
+
+
+func rebuild(
+	new_width: int,
+	new_height: int,
+	new_ground_rows: int,
+	new_platforms: Array[Rect2i]
+) -> void:
+	width = new_width
+	height = new_height
+	ground_rows = new_ground_rows
+	platforms = new_platforms
+	clear()
+	_build_grid()
+	_render_all()
 
 
 func get_solid_cell_count() -> int:
@@ -57,9 +76,10 @@ func explode(world_position: Vector2, radius: float) -> Array[Vector2i]:
 
 
 func _build_grid() -> void:
-	grid = TerrainGrid.new(WIDTH, HEIGHT)
-	grid.fill_rect(Rect2i(0, HEIGHT - GROUND_ROWS, WIDTH, GROUND_ROWS))
-	grid.fill_rect(PLATFORM_RECT)
+	grid = TerrainGrid.new(width, height)
+	grid.fill_rect(Rect2i(0, height - ground_rows, width, ground_rows))
+	for platform in platforms:
+		grid.fill_rect(platform)
 
 
 func _build_tile_set() -> void:
@@ -92,8 +112,8 @@ func _build_tile_set() -> void:
 
 
 func _render_all() -> void:
-	for y in range(HEIGHT):
-		for x in range(WIDTH):
+	for y in range(height):
+		for x in range(width):
 			var cell := Vector2i(x, y)
 			if grid.is_solid(cell):
 				set_cell(cell, 0, Vector2i.ZERO, 0)

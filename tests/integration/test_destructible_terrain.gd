@@ -90,3 +90,15 @@ func _make_player(position: Vector2) -> Player:
 func _wait_physics_frames(count: int) -> void:
 	for index in count:
 		await get_tree().physics_frame
+
+
+func test_rebuild_changes_grid_size_and_layout() -> void:
+	var terrain := _make_terrain()
+
+	terrain.rebuild(120, 34, 6, [Rect2i(10, 10, 4, 2)])
+
+	assert_eq(terrain.grid.width, 120)
+	assert_eq(terrain.grid.height, 34)
+	assert_true(terrain.grid.is_solid(Vector2i(10, 10)))
+	assert_true(terrain.grid.is_solid(Vector2i(119, 33)))
+	assert_eq(terrain.get_used_cells().size(), terrain.get_solid_cell_count())

@@ -82,3 +82,33 @@ func _make_setup() -> Dictionary:
 func _wait_physics_frames(count: int) -> void:
 	for index in count:
 		await get_tree().physics_frame
+
+
+func test_player_dies_once_and_emits_signal() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	watch_signals(player)
+
+	player.take_damage()
+	assert_false(player.alive)
+	assert_false(player.visible)
+	assert_signal_emit_count(player, "died", 1)
+
+	player.take_damage()
+	assert_signal_emit_count(player, "died", 1, "death must only be emitted once")
+
+
+func test_player_respawn_restores_state_and_grants_invulnerability() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	player.take_damage()
+
+	player.respawn(Vector2(50, 50))
+
+	assert_true(player.alive)
+	assert_true(player.visible)
+	assert_true(player.invulnerable)
+	assert_eq(player.global_position, Vector2(50, 50))
+
+	player.take_damage()
+	assert_true(player.alive, "invulnerability must ignore damage")

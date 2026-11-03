@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Force"
-run/main_scene="res://scenes/debug_session.tscn"
+run/main_scene="res://scenes/level_01.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

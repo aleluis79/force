@@ -255,3 +255,48 @@ func test_invalid_transitions_do_not_emit_state_changed() -> void:
 	assert_signal_emit_count(session, "state_changed", 0)
 	assert_signal_emit_count(session, "lives_changed", 0)
 	assert_signal_emit_count(session, "score_changed", 0)
+
+
+func test_win_moves_playing_to_victory() -> void:
+	var session := GameSession.new()
+	session.start()
+
+	session.win()
+
+	assert_eq(session.state, GameSession.State.VICTORY)
+	assert_true(session.is_victory())
+
+
+func test_win_is_ignored_outside_playing() -> void:
+	var session := GameSession.new()
+
+	session.win()
+	assert_eq(session.state, GameSession.State.READY)
+
+	session.start()
+	session.pause()
+	session.win()
+	assert_eq(session.state, GameSession.State.PAUSED)
+
+
+func test_add_life_increments_and_emits_signal() -> void:
+	var session := GameSession.new()
+	watch_signals(session)
+
+	session.add_life()
+
+	assert_eq(session.lives, 4)
+	assert_signal_emitted_with_parameters(session, "lives_changed", [4])
+
+
+func test_restart_from_victory_resets_the_run() -> void:
+	var session := GameSession.new()
+	session.start()
+	session.add_score(300)
+	session.win()
+
+	session.restart()
+
+	assert_eq(session.state, GameSession.State.PLAYING)
+	assert_eq(session.lives, 3)
+	assert_eq(session.score, 0)

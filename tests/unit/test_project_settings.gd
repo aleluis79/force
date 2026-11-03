@@ -82,9 +82,9 @@ func test_physics_runs_at_60_ticks() -> void:
 	)
 
 
-func test_main_scene_is_debug_session() -> void:
+func test_main_scene_is_level_01() -> void:
 	assert_eq(
 		ProjectSettings.get_setting("application/run/main_scene"),
-		"res://scenes/debug_session.tscn",
-		"main scene must be the debug session scene"
+		"res://scenes/level_01.tscn",
+		"main scene must be the playable level"
 	)

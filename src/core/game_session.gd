@@ -11,6 +11,7 @@ enum State {
 	PLAYING,
 	PAUSED,
 	GAME_OVER,
+	VICTORY,
 }
 
 const STARTING_LIVES := 3
@@ -61,6 +62,16 @@ func is_game_over() -> bool:
 	return state == State.GAME_OVER
 
 
+func is_victory() -> bool:
+	return state == State.VICTORY
+
+
+func win() -> void:
+	if state != State.PLAYING:
+		return
+	_set_state(State.VICTORY)
+
+
 func lose_life() -> void:
 	if state != State.PLAYING:
 		return
@@ -78,6 +89,11 @@ func add_score(points: int) -> void:
 
 	score += points
 	score_changed.emit(score)
+
+
+func add_life() -> void:
+	lives += 1
+	lives_changed.emit(lives)
 
 
 func restart() -> void:

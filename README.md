@@ -30,19 +30,20 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 /home/alejandro/godot/Godot_v4.7.2-stable_linux.x86_64 --path .
 ```
 
-La escena principal es `scenes/debug_session.tscn`. Muestra el estado de la sesión, las vidas y la puntuación, y permite probar el bucle sin gameplay:
+La escena principal es `scenes/level_01.tscn`, un nivel jugable de 960 px con terreno destructible, plataformas, enemigos, prisioneros y una salida.
+
+**Objetivo:** avanzar hasta la bandera de salida. Rescatar prisioneros da una vida extra, 500 puntos y un nuevo checkpoint. Los enemigos dañan al contacto; el jugador muere de un golpe, tiene 3 vidas y reaparece en el último checkpoint.
+
+Controles:
 
 - **A/D o flechas** mueven al jugador.
 - **Espacio** salta (con coyote time y jump buffer).
 - **Ratón o stick derecho** apuntan en 360°; la cámara añade look-ahead.
-- **Clic izquierdo o RT** dispara el arma activa.
-- Botones **Rifle** y **Shotgun** cambian de arma.
-- **Esc** pausa o reanuda la sesión.
-- **R** reinicia la partida con 3 vidas y 0 puntos.
-- Botones **Lose life**, **Add 100**, **Restart** y **Explode** para simular eventos.
-- **Explode** destruye terreno destructible cerca del jugador (celdas de 8 px).
+- **Clic izquierdo o RT** dispara el rifle.
+- **Esc** pausa o reanuda la partida.
+- **R** reinicia el nivel con 3 vidas y 0 puntos.
 
-`scenes/bootstrap.tscn` se conserva como fixture del smoke test de la fundación.
+`scenes/debug_session.tscn` se conserva como banco de pruebas: dummy, botones **Rifle**/**Shotgun**, **Lose life**, **Add 100**, **Restart** y **Explode**. `scenes/bootstrap.tscn` sigue siendo el fixture del smoke test de la fundación.
 
 ## Ejecutar la puerta de calidad
 
@@ -140,4 +141,5 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Jugador: movimiento, salto con coyote time/jump buffer, apuntado 360° y cámara.
 - [x] Terreno destructible: celdas de 8 px, explosiones, tiles y colisión.
 - [x] Combate: rifle, escopeta, balas con pooling, daño, retroceso e hitstop.
-- [ ] Enemigos, rescates y nivel jugable (siguientes changes).
+- [x] Enemigos, rescates, nivel jugable, HUD, victoria, game over y reinicio.
+- [x] Vertical slice jugable de principio a fin.
