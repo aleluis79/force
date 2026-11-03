@@ -74,7 +74,7 @@ func _make_setup() -> Dictionary:
 	player_rect.size = PLAYER_SIZE
 	player_shape.shape = player_rect
 	player.add_child(player_shape)
-	add_child_autofree(player)
+	add_child_autoqfree(player)
 
 	return {"player": player, "input": input}
 

@@ -1,6 +1,8 @@
 extends Node2D
 
 @onready var controller: SessionController = $SessionController
+@onready var terrain: DestructibleTerrain = $Terrain
+@onready var player: Player = $Player
 @onready var state_label: Label = $UI/StateLabel
 @onready var lives_label: Label = $UI/LivesLabel
 @onready var score_label: Label = $UI/ScoreLabel
@@ -14,6 +16,7 @@ func _ready() -> void:
 	$UI/LoseLifeButton.pressed.connect(_on_lose_life_pressed)
 	$UI/AddScoreButton.pressed.connect(_on_add_score_pressed)
 	$UI/RestartButton.pressed.connect(_on_restart_pressed)
+	$UI/ExplodeButton.pressed.connect(_on_explode_pressed)
 
 	_refresh()
 
@@ -47,3 +50,7 @@ func _on_add_score_pressed() -> void:
 
 func _on_restart_pressed() -> void:
 	controller.session.restart()
+
+
+func _on_explode_pressed() -> void:
+	terrain.explode(player.global_position + Vector2(0, 16), 32.0)

@@ -37,7 +37,8 @@ La escena principal es `scenes/debug_session.tscn`. Muestra el estado de la sesi
 - **Ratón o stick derecho** apuntan en 360°; la cámara añade look-ahead.
 - **Esc** pausa o reanuda la sesión.
 - **R** reinicia la partida con 3 vidas y 0 puntos.
-- Botones **Lose life**, **Add 100** y **Restart** para simular eventos.
+- Botones **Lose life**, **Add 100**, **Restart** y **Explode** para simular eventos.
+- **Explode** destruye terreno destructible cerca del jugador (celdas de 8 px).
 
 `scenes/bootstrap.tscn` se conserva como fixture del smoke test de la fundación.
 
@@ -135,4 +136,5 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Smoke test de arranque.
 - [x] Bucle de sesión: estados, vidas, puntuación, pausa y reinicio.
 - [x] Jugador: movimiento, salto con coyote time/jump buffer, apuntado 360° y cámara.
-- [ ] Combate, destrucción, enemigos y niveles (siguientes changes).
+- [x] Terreno destructible: celdas de 8 px, explosiones, tiles y colisión.
+- [ ] Combate, enemigos y niveles (siguientes changes).

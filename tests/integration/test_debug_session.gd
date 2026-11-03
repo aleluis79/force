@@ -51,12 +51,22 @@ func test_pause_event_updates_state_label() -> void:
 	assert_eq(scene.state_label.text, "State: PAUSED")
 
 
-func test_debug_scene_contains_player_ground_and_platform() -> void:
+func test_debug_scene_contains_player_and_terrain() -> void:
 	var scene = await _instantiate_debug_scene()
 
 	assert_not_null(scene.get_node_or_null("Player"), "debug scene must include the player")
-	assert_not_null(scene.get_node_or_null("Ground"), "debug scene must include the ground")
-	assert_not_null(scene.get_node_or_null("Platform"), "debug scene must include the platform")
+	assert_not_null(scene.get_node_or_null("Terrain"), "debug scene must include destructible terrain")
+
+
+func test_explode_button_removes_terrain() -> void:
+	var scene = await _instantiate_debug_scene()
+	var terrain := scene.get_node("Terrain") as DestructibleTerrain
+	assert_not_null(terrain, "debug scene must expose a DestructibleTerrain node")
+	var before := terrain.get_solid_cell_count()
+
+	scene.get_node("UI/ExplodeButton").pressed.emit()
+
+	assert_lt(terrain.get_solid_cell_count(), before, "explode button must destroy terrain")
 
 
 func test_player_lands_on_ground_in_debug_scene() -> void:
@@ -74,7 +84,7 @@ func _instantiate_debug_scene() -> Node:
 	var packed := load(DEBUG_SCENE) as PackedScene
 	assert_not_null(packed, "debug session scene must load")
 	var scene := packed.instantiate()
-	add_child_autofree(scene)
+	add_child_autoqfree(scene)
 	await get_tree().process_frame
 	return scene
 

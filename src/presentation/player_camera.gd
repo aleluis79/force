@@ -18,3 +18,7 @@ func update_look_ahead(aim: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	position = position.lerp(target_offset, clampf(follow_speed * delta, 0.0, 1.0))
+
+
+func _exit_tree() -> void:
+	enabled = false
