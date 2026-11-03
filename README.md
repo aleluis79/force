@@ -32,6 +32,9 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 
 La escena principal es `scenes/debug_session.tscn`. Muestra el estado de la sesión, las vidas y la puntuación, y permite probar el bucle sin gameplay:
 
+- **A/D o flechas** mueven al jugador.
+- **Espacio** salta (con coyote time y jump buffer).
+- **Ratón o stick derecho** apuntan en 360°; la cámara añade look-ahead.
 - **Esc** pausa o reanuda la sesión.
 - **R** reinicia la partida con 3 vidas y 0 puntos.
 - Botones **Lose life**, **Add 100** y **Restart** para simular eventos.
@@ -131,4 +134,5 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Guardia de aislamiento de `src/core`.
 - [x] Smoke test de arranque.
 - [x] Bucle de sesión: estados, vidas, puntuación, pausa y reinicio.
-- [ ] Gameplay del vertical slice (siguientes changes).
+- [x] Jugador: movimiento, salto con coyote time/jump buffer, apuntado 360° y cámara.
+- [ ] Combate, destrucción, enemigos y niveles (siguientes changes).

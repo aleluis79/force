@@ -51,6 +51,25 @@ func test_pause_event_updates_state_label() -> void:
 	assert_eq(scene.state_label.text, "State: PAUSED")
 
 
+func test_debug_scene_contains_player_ground_and_platform() -> void:
+	var scene = await _instantiate_debug_scene()
+
+	assert_not_null(scene.get_node_or_null("Player"), "debug scene must include the player")
+	assert_not_null(scene.get_node_or_null("Ground"), "debug scene must include the ground")
+	assert_not_null(scene.get_node_or_null("Platform"), "debug scene must include the platform")
+
+
+func test_player_lands_on_ground_in_debug_scene() -> void:
+	var scene = await _instantiate_debug_scene()
+	var player := scene.get_node("Player") as Player
+	assert_not_null(player, "debug scene must expose a Player node")
+
+	for index in 60:
+		await get_tree().physics_frame
+
+	assert_true(player.is_on_floor(), "player must land on the debug scene ground")
+
+
 func _instantiate_debug_scene() -> Node:
 	var packed := load(DEBUG_SCENE) as PackedScene
 	assert_not_null(packed, "debug session scene must load")
