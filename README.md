@@ -35,6 +35,8 @@ La escena principal es `scenes/debug_session.tscn`. Muestra el estado de la sesi
 - **A/D o flechas** mueven al jugador.
 - **Espacio** salta (con coyote time y jump buffer).
 - **Ratón o stick derecho** apuntan en 360°; la cámara añade look-ahead.
+- **Clic izquierdo o RT** dispara el arma activa.
+- Botones **Rifle** y **Shotgun** cambian de arma.
 - **Esc** pausa o reanuda la sesión.
 - **R** reinicia la partida con 3 vidas y 0 puntos.
 - Botones **Lose life**, **Add 100**, **Restart** y **Explode** para simular eventos.
@@ -137,4 +139,5 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Bucle de sesión: estados, vidas, puntuación, pausa y reinicio.
 - [x] Jugador: movimiento, salto con coyote time/jump buffer, apuntado 360° y cámara.
 - [x] Terreno destructible: celdas de 8 px, explosiones, tiles y colisión.
-- [ ] Combate, enemigos y niveles (siguientes changes).
+- [x] Combate: rifle, escopeta, balas con pooling, daño, retroceso e hitstop.
+- [ ] Enemigos, rescates y nivel jugable (siguientes changes).

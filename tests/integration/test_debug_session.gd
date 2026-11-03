@@ -56,6 +56,17 @@ func test_debug_scene_contains_player_and_terrain() -> void:
 
 	assert_not_null(scene.get_node_or_null("Player"), "debug scene must include the player")
 	assert_not_null(scene.get_node_or_null("Terrain"), "debug scene must include destructible terrain")
+	assert_not_null(scene.get_node_or_null("TrainingDummy"), "debug scene must include a practice dummy")
+
+
+func test_weapon_buttons_switch_the_active_weapon() -> void:
+	var scene = await _instantiate_debug_scene()
+
+	scene.get_node("UI/ShotgunButton").pressed.emit()
+	assert_eq(scene.player.weapon_state.stats.id, "shotgun")
+
+	scene.get_node("UI/RifleButton").pressed.emit()
+	assert_eq(scene.player.weapon_state.stats.id, "rifle")
 
 
 func test_explode_button_removes_terrain() -> void:

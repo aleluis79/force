@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var controller: SessionController = $SessionController
+@onready var hit_stop: Node = $HitStop
 @onready var terrain: DestructibleTerrain = $Terrain
 @onready var player: Player = $Player
 @onready var state_label: Label = $UI/StateLabel
@@ -17,6 +18,10 @@ func _ready() -> void:
 	$UI/AddScoreButton.pressed.connect(_on_add_score_pressed)
 	$UI/RestartButton.pressed.connect(_on_restart_pressed)
 	$UI/ExplodeButton.pressed.connect(_on_explode_pressed)
+	$UI/RifleButton.pressed.connect(_on_rifle_pressed)
+	$UI/ShotgunButton.pressed.connect(_on_shotgun_pressed)
+
+	player.bullet_pool.hit_confirmed.connect(_on_hit_confirmed)
 
 	_refresh()
 
@@ -54,3 +59,15 @@ func _on_restart_pressed() -> void:
 
 func _on_explode_pressed() -> void:
 	terrain.explode(player.global_position + Vector2(0, 16), 32.0)
+
+
+func _on_rifle_pressed() -> void:
+	player.set_weapon(WeaponStats.rifle())
+
+
+func _on_shotgun_pressed() -> void:
+	player.set_weapon(WeaponStats.shotgun())
+
+
+func _on_hit_confirmed(_position: Vector2, _target: Node) -> void:
+	hit_stop.trigger(0.04)

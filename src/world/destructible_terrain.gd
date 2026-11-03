@@ -18,9 +18,20 @@ var grid: TerrainGrid
 
 
 func _ready() -> void:
+	add_to_group("terrain")
 	_build_grid()
 	_build_tile_set()
 	_render_all()
+
+
+func is_solid_at_world(world_position: Vector2) -> bool:
+	if grid == null:
+		return false
+	var cell := Vector2i(
+		floori(world_position.x / float(TILE_SIZE)),
+		floori(world_position.y / float(TILE_SIZE))
+	)
+	return grid.is_solid(cell)
 
 
 func get_solid_cell_count() -> int:

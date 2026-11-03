@@ -18,6 +18,14 @@ func was_jump_just_released() -> bool:
 	return Input.is_action_just_released("jump")
 
 
+func is_shoot_pressed() -> bool:
+	return Input.is_action_pressed("shoot")
+
+
+func was_shoot_just_pressed() -> bool:
+	return Input.is_action_just_pressed("shoot")
+
+
 func get_aim_direction(origin: Vector2, pointer: Vector2) -> Vector2:
 	var stick := Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
 	if stick.length() > AIM_DEADZONE:
