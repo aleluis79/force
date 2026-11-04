@@ -8,6 +8,9 @@ extends TileMapLayer
 
 signal terrain_destroyed(cells: Array, world_position: Vector2)
 
+const TILE_TEXTURE := preload("res://assets/sprites/terrain.png")
+const DIRT_TILE := Vector2i(0, 0)
+const GRASS_TILE := Vector2i(1, 0)
 const TILE_SIZE := 8
 const WIDTH := 60
 const HEIGHT := 34
@@ -69,7 +72,12 @@ func explode(world_position: Vector2, radius: float) -> Array[Vector2i]:
 	for cell in destroyed:
 		erase_cell(cell)
 
+	for cell in destroyed:
+		for offset in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
+			_refresh_cell(cell + offset)
+
 	if not destroyed.is_empty():
+		AudioManager.play_sfx("explosion")
 		terrain_destroyed.emit(destroyed, world_position)
 
 	return destroyed
@@ -83,30 +91,27 @@ func _build_grid() -> void:
 
 
 func _build_tile_set() -> void:
-	var image := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
-	image.fill(Color(0.18, 0.2, 0.26))
-
-	var texture := ImageTexture.create_from_image(image)
-
 	var new_tile_set := TileSet.new()
 	new_tile_set.tile_size = Vector2i(TILE_SIZE, TILE_SIZE)
 	new_tile_set.add_physics_layer()
 	new_tile_set.set_physics_layer_collision_layer(0, 1)
 
 	var source := TileSetAtlasSource.new()
-	source.texture = texture
+	source.texture = TILE_TEXTURE
 	source.texture_region_size = Vector2i(TILE_SIZE, TILE_SIZE)
-	source.create_tile(Vector2i.ZERO)
+	source.create_tile(DIRT_TILE)
+	source.create_tile(GRASS_TILE)
 	new_tile_set.add_source(source, 0)
 
-	var tile_data := source.get_tile_data(Vector2i.ZERO, 0)
-	tile_data.add_collision_polygon(0)
-	tile_data.set_collision_polygon_points(0, 0, PackedVector2Array([
-		Vector2(-4, -4),
-		Vector2(4, -4),
-		Vector2(4, 4),
-		Vector2(-4, 4),
-	]))
+	for tile in [DIRT_TILE, GRASS_TILE]:
+		var tile_data := source.get_tile_data(tile, 0)
+		tile_data.add_collision_polygon(0)
+		tile_data.set_collision_polygon_points(0, 0, PackedVector2Array([
+			Vector2(-4, -4),
+			Vector2(4, -4),
+			Vector2(4, 4),
+			Vector2(-4, 4),
+		]))
 
 	tile_set = new_tile_set
 
@@ -114,6 +119,17 @@ func _build_tile_set() -> void:
 func _render_all() -> void:
 	for y in range(height):
 		for x in range(width):
-			var cell := Vector2i(x, y)
-			if grid.is_solid(cell):
-				set_cell(cell, 0, Vector2i.ZERO, 0)
+			_refresh_cell(Vector2i(x, y))
+
+
+func _refresh_cell(cell: Vector2i) -> void:
+	if grid.is_solid(cell):
+		set_cell(cell, 0, _tile_for(cell), 0)
+	else:
+		erase_cell(cell)
+
+
+func _tile_for(cell: Vector2i) -> Vector2i:
+	if grid.is_solid(cell + Vector2i.UP):
+		return DIRT_TILE
+	return GRASS_TILE

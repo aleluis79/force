@@ -14,6 +14,8 @@ const CONTACT_RANGE := 18.0
 var health := Health.new(30)
 var _player: Player
 
+@onready var _sprite: Sprite2D = get_node_or_null("Sprite") as Sprite2D
+
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -40,6 +42,10 @@ func _physics_process(delta: float) -> void:
 		velocity.y += GRAVITY * delta
 
 	move_and_slide()
+
+	if _sprite != null:
+		_sprite.frame = int(Time.get_ticks_msec() / 150) % 2
+		_sprite.flip_h = velocity.x < -0.1
 
 
 func take_damage(amount: int) -> void:

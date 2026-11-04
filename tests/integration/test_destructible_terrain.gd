@@ -102,3 +102,18 @@ func test_rebuild_changes_grid_size_and_layout() -> void:
 	assert_true(terrain.grid.is_solid(Vector2i(10, 10)))
 	assert_true(terrain.grid.is_solid(Vector2i(119, 33)))
 	assert_eq(terrain.get_used_cells().size(), terrain.get_solid_cell_count())
+
+
+func test_surface_uses_grass_and_below_uses_dirt() -> void:
+	var terrain := _make_terrain()
+
+	assert_eq(terrain.get_cell_atlas_coords(Vector2i(0, 28)), DestructibleTerrain.GRASS_TILE)
+	assert_eq(terrain.get_cell_atlas_coords(Vector2i(0, 29)), DestructibleTerrain.DIRT_TILE)
+
+
+func test_destroying_the_surface_promotes_dirt_to_grass() -> void:
+	var terrain := _make_terrain()
+
+	terrain.explode(Vector2(4, 228), 4.0)
+
+	assert_eq(terrain.get_cell_atlas_coords(Vector2i(0, 29)), DestructibleTerrain.GRASS_TILE)

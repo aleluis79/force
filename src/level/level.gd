@@ -7,6 +7,7 @@ const FALL_LIMIT := 320.0
 const EXIT_RANGE := 20.0
 
 @onready var session_controller: SessionController = $SessionController
+@onready var hit_stop: Node = $HitStop
 @onready var terrain: DestructibleTerrain = $Terrain
 @onready var player: Player = $Player
 @onready var exit: Node2D = $Exit
@@ -23,12 +24,20 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	session_controller.process_mode = Node.PROCESS_MODE_ALWAYS
 	$UI.process_mode = Node.PROCESS_MODE_ALWAYS
+	var ui_theme := load("res://assets/theme/game_theme.tres") as Theme
+	for child in $UI.get_children():
+		if child is Control:
+			child.theme = ui_theme
 
-	terrain.rebuild(120, 34, 6, [
+	terrain.rebuild(240, 34, 6, [
 		Rect2i(20, 22, 14, 2),
 		Rect2i(45, 18, 14, 2),
 		Rect2i(70, 22, 16, 2),
 		Rect2i(95, 16, 14, 2),
+		Rect2i(120, 20, 18, 2),
+		Rect2i(150, 16, 16, 2),
+		Rect2i(180, 22, 14, 2),
+		Rect2i(210, 18, 16, 2),
 	])
 
 	var camera := player.get_node_or_null("Camera2D") as Camera2D
@@ -41,6 +50,8 @@ func _ready() -> void:
 	_session.score_changed.connect(_on_score_changed)
 	player.died.connect(_on_player_died)
 	player.weapon_changed.connect(_on_weapon_changed)
+	player.bullet_pool.hit_confirmed.connect(_on_hit_confirmed)
+	terrain.terrain_destroyed.connect(_on_terrain_destroyed)
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if enemy.has_signal("died"):
@@ -54,6 +65,11 @@ func _ready() -> void:
 	_on_score_changed(_session.score)
 	_on_weapon_changed(player.weapon_state.stats)
 	_update_message()
+	AudioManager.play_music()
+
+
+func _exit_tree() -> void:
+	AudioManager.stop_music()
 
 
 func _physics_process(_delta: float) -> void:
@@ -73,7 +89,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().reload_current_scene()
 
 
-func _on_state_changed(_previous: int, _current: int) -> void:
+func _on_state_changed(_previous: int, current: int) -> void:
+	if current == GameSession.State.VICTORY:
+		AudioManager.play_sfx("victory")
 	get_tree().paused = _session.is_paused()
 	var active := _session.is_playing()
 	player.set_physics_process(active)
@@ -87,6 +105,7 @@ func _on_player_died() -> void:
 	if not _session.is_playing():
 		return
 
+	AudioManager.play_sfx("death")
 	_session.lose_life()
 	if _session.is_game_over():
 		return
@@ -97,10 +116,12 @@ func _on_player_died() -> void:
 
 
 func _on_enemy_died(points: int) -> void:
+	AudioManager.play_sfx("hit")
 	_session.add_score(points)
 
 
 func _on_pow_rescued(pow: Node) -> void:
+	AudioManager.play_sfx("pickup")
 	checkpoint = pow.global_position
 	_session.add_life()
 	_session.add_score(500)
@@ -116,6 +137,20 @@ func _on_score_changed(score: int) -> void:
 
 func _on_weapon_changed(stats: WeaponStats) -> void:
 	weapon_label.text = "Weapon: %s" % stats.id.capitalize()
+
+
+func _on_hit_confirmed(_position: Vector2, _target: Node) -> void:
+	AudioManager.play_sfx("hit")
+	hit_stop.trigger(0.04)
+	var camera := player.get_node_or_null("Camera2D") as PlayerCamera
+	if camera != null:
+		camera.shake(3.0)
+
+
+func _on_terrain_destroyed(_cells: Array, _position: Vector2) -> void:
+	var camera := player.get_node_or_null("Camera2D") as PlayerCamera
+	if camera != null:
+		camera.shake(2.0)
 
 
 func _update_message() -> void:

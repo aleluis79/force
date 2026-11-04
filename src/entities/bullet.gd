@@ -7,6 +7,7 @@ signal finished(bullet)
 signal hit_target(target: Node, position: Vector2)
 
 const TARGET_COLLISION_MASK := 2
+const TEXTURE := preload("res://assets/sprites/bullet.png")
 
 var direction := Vector2.RIGHT
 var speed := 600.0
@@ -19,15 +20,9 @@ var _finished := false
 
 
 func _ready() -> void:
-	var visual := Polygon2D.new()
-	visual.polygon = PackedVector2Array([
-		Vector2(-2, -1),
-		Vector2(2, -1),
-		Vector2(2, 1),
-		Vector2(-2, 1),
-	])
-	visual.color = Color(1.0, 0.9, 0.3)
-	add_child(visual)
+	var sprite := Sprite2D.new()
+	sprite.texture = TEXTURE
+	add_child(sprite)
 
 
 func setup(
@@ -36,6 +31,7 @@ func setup(
 	new_terrain: DestructibleTerrain
 ) -> void:
 	direction = new_direction.normalized() if new_direction.length() > 0.001 else Vector2.RIGHT
+	rotation = direction.angle()
 	speed = stats.bullet_speed
 	damage = stats.damage
 	lifetime = stats.bullet_lifetime

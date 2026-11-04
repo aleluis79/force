@@ -16,6 +16,7 @@ var invulnerable := false
 
 @onready var _camera: PlayerCamera = get_node_or_null("Camera2D") as PlayerCamera
 @onready var bullet_pool: BulletPool = get_node_or_null("BulletPool") as BulletPool
+@onready var _sprite: Sprite2D = get_node_or_null("Sprite") as Sprite2D
 
 var _invulnerability_timer: Timer
 
@@ -51,6 +52,11 @@ func _physics_process(delta: float) -> void:
 
 	if _camera != null:
 		_camera.update_look_ahead(aim_direction)
+
+	_update_sprite()
+
+	if motion.jumped_this_tick:
+		AudioManager.play_sfx("jump")
 
 	weapon_state.tick(delta)
 	if weapon_state.try_fire(input_source.is_shoot_pressed(), input_source.was_shoot_just_pressed()):
@@ -98,5 +104,20 @@ func _fire() -> void:
 	for direction in weapon_state.get_projectile_directions(aim_direction):
 		bullet_pool.spawn(muzzle_position, direction, stats, terrain)
 
+	AudioManager.play_sfx("shotgun" if stats.id == "shotgun" else "shoot")
 	velocity -= aim_direction * stats.recoil
 	motion.velocity = velocity
+
+
+func _update_sprite() -> void:
+	if _sprite == null:
+		return
+
+	if not is_on_floor():
+		_sprite.frame = 5
+	elif absf(velocity.x) > 1.0:
+		_sprite.frame = 1 + int(Time.get_ticks_msec() / 90) % 4
+	else:
+		_sprite.frame = 0
+
+	_sprite.flip_h = aim_direction.x < -0.01

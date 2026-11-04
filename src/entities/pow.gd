@@ -10,6 +10,8 @@ const RESCUE_RANGE := 16.0
 var _rescued := false
 var _player: Player
 
+@onready var _sprite: Sprite2D = get_node_or_null("Sprite") as Sprite2D
+
 
 func _ready() -> void:
 	add_to_group("pows")
@@ -23,6 +25,9 @@ func _physics_process(_delta: float) -> void:
 
 	if _player == null:
 		_player = get_tree().get_first_node_in_group("player") as Player
+
+	if _sprite != null:
+		_sprite.frame = int(Time.get_ticks_msec() / 250) % 2
 
 	if _player == null or not _player.alive:
 		return

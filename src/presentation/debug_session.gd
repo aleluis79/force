@@ -10,6 +10,10 @@ extends Node2D
 
 
 func _ready() -> void:
+	var ui_theme := load("res://assets/theme/game_theme.tres") as Theme
+	for child in $UI.get_children():
+		if child is Control:
+			child.theme = ui_theme
 	controller.session.state_changed.connect(_on_state_changed)
 	controller.session.lives_changed.connect(_on_lives_changed)
 	controller.session.score_changed.connect(_on_score_changed)
@@ -22,6 +26,7 @@ func _ready() -> void:
 	$UI/ShotgunButton.pressed.connect(_on_shotgun_pressed)
 
 	player.bullet_pool.hit_confirmed.connect(_on_hit_confirmed)
+	terrain.terrain_destroyed.connect(_on_terrain_destroyed)
 
 	_refresh()
 
@@ -71,3 +76,13 @@ func _on_shotgun_pressed() -> void:
 
 func _on_hit_confirmed(_position: Vector2, _target: Node) -> void:
 	hit_stop.trigger(0.04)
+	AudioManager.play_sfx("hit")
+	var camera := player.get_node_or_null("Camera2D") as PlayerCamera
+	if camera != null:
+		camera.shake(3.0)
+
+
+func _on_terrain_destroyed(_cells: Array, _position: Vector2) -> void:
+	var camera := player.get_node_or_null("Camera2D") as PlayerCamera
+	if camera != null:
+		camera.shake(2.0)

@@ -14,6 +14,8 @@ var health := Health.new(10)
 var _player: Player
 var _dead := false
 
+@onready var _sprite: Sprite2D = get_node_or_null("Sprite") as Sprite2D
+
 
 func _ready() -> void:
 	add_to_group("enemies")
@@ -33,6 +35,9 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var direction := (_player.global_position - global_position).normalized()
+	rotation = direction.angle()
+	if _sprite != null:
+		_sprite.frame = int(Time.get_ticks_msec() / 100) % 2
 	global_position += direction * SPEED * delta
 
 	if global_position.distance_to(_player.global_position) < CONTACT_RANGE:

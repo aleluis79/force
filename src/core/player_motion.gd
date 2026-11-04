@@ -18,6 +18,7 @@ const JUMP_BUFFER_TIME := 0.1
 
 var velocity := Vector2.ZERO
 var grounded := false
+var jumped_this_tick := false
 
 var _coyote_timer := 0.0
 var _jump_buffer_timer := 0.0
@@ -38,6 +39,7 @@ func tick(
 	grounded_now: bool
 ) -> Vector2:
 	grounded = grounded_now
+	jumped_this_tick = false
 
 	if grounded:
 		_coyote_timer = COYOTE_TIME
@@ -62,6 +64,7 @@ func tick(
 		velocity.y = JUMP_VELOCITY
 		_jump_buffer_timer = 0.0
 		_coyote_timer = 0.0
+		jumped_this_tick = true
 
 	if jump_just_released and velocity.y < 0.0:
 		velocity.y *= JUMP_CUT_MULTIPLIER

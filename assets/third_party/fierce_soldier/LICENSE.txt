@@ -1,0 +1,15 @@
+Fierce Soldier sprites
+======================
+
+Author: Vircon32 (Carra)
+Source: https://opengameart.org/content/fierce-soldier-sprites
+License: Creative Commons Attribution 4.0 International (CC-BY 4.0)
+License text: https://creativecommons.org/licenses/by/4.0/
+
+The soldier, enemy and scenery sprites used in this project come from the
+"Fierce Soldier sprites" pack. Frames were cropped, scaled to the game's
+internal resolution and rearranged into sprite sheets. No other changes were
+made to the original artwork.
+
+Attribution is required by the license. See the project README for the
+attribution notice.

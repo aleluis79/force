@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/background/sky.png" id="1_sky"]
+[ext_resource type="Texture2D" path="res://assets/background/far.png" id="2_far"]
+[ext_resource type="Texture2D" path="res://assets/background/near.png" id="3_near"]
+
+[node name="Background" type="ParallaxBackground"]
+z_index = -10
+
+[node name="Sky" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Sky"]
+texture = ExtResource("1_sky")
+centered = false
+
+[node name="Far" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.2, 0)
+motion_mirroring = Vector2(480, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Far"]
+texture = ExtResource("2_far")
+centered = false
+
+[node name="Near" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 0)
+motion_mirroring = Vector2(480, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Near"]
+texture = ExtResource("3_near")
+centered = false

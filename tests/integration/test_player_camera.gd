@@ -30,6 +30,18 @@ func test_camera_smooths_toward_the_target() -> void:
 	assert_almost_eq(camera.position.x, 32.0, 0.5)
 
 
+func test_shake_activates_and_expires() -> void:
+	var camera := PlayerCamera.new()
+	camera.enabled = false
+	add_child_autoqfree(camera)
+
+	camera.shake(4.0, 0.1)
+	assert_true(camera.is_shaking(), "shake must start")
+
+	await _wait_process_frames(20)
+	assert_false(camera.is_shaking(), "shake must expire")
+
+
 func test_player_scene_has_a_camera() -> void:
 	var packed := load("res://scenes/player.tscn") as PackedScene
 	assert_not_null(packed, "player scene must load")

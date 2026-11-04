@@ -88,3 +88,10 @@ func test_main_scene_is_level_01() -> void:
 		"res://scenes/level_01.tscn",
 		"main scene must be the playable level"
 	)
+
+
+func test_pixel_theme_resource_exists() -> void:
+	assert_true(
+		ResourceLoader.exists("res://assets/theme/game_theme.tres"),
+		"pixel theme resource must exist"
+	)

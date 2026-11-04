@@ -8,12 +8,12 @@ Define el nivel jugable, la muerte y reaparición del jugador, la salida, la vic
 
 ### Requirement: Nivel jugable
 
-El nivel DEBE (MUST) tener 960 px de ancho, terreno destructible con plataformas, jugador, enemigos, prisioneros y una salida.
+El nivel DEBE (MUST) tener 1920 px de ancho, terreno destructible con plataformas, jugador, al menos 10 enemigos, al menos 4 prisioneros y una salida.
 
 #### Scenario: Carga del nivel
 
 - **WHEN** se carga el nivel
-- **THEN** el jugador aparece sobre el terreno y existen enemigos, prisioneros y salida
+- **THEN** el jugador aparece sobre el terreno y existen al menos 10 enemigos, 4 prisioneros y una salida
 
 #### Scenario: Cámara del nivel
 

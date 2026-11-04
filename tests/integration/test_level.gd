@@ -11,14 +11,15 @@ func after_each() -> void:
 func test_level_loads_with_content() -> void:
 	var level = await _instantiate_level()
 
-	assert_eq(level.terrain.width, 120, "level terrain must be 960 px wide")
+	assert_eq(level.terrain.width, 240, "level terrain must be 1920 px wide")
 	assert_not_null(level.player, "level must include the player")
 	assert_not_null(level.exit, "level must include an exit")
-	assert_eq(_count_group_in_level(level, "enemies"), 5)
-	assert_eq(_count_group_in_level(level, "pows"), 2)
+	assert_eq(_count_group_in_level(level, "enemies"), 10)
+	assert_eq(_count_group_in_level(level, "pows"), 4)
 	assert_eq(level.lives_label.text, "Lives: 3")
 	assert_eq(level.score_label.text, "Score: 0")
 	assert_eq(level.weapon_label.text, "Weapon: Rifle")
+	assert_not_null(level.lives_label.theme, "HUD must use the pixel theme")
 
 
 func test_player_lands_on_the_level_ground() -> void:

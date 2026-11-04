@@ -30,7 +30,7 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 /home/alejandro/godot/Godot_v4.7.2-stable_linux.x86_64 --path .
 ```
 
-La escena principal es `scenes/level_01.tscn`, un nivel jugable de 960 px con terreno destructible, plataformas, enemigos, prisioneros y una salida.
+La escena principal es `scenes/level_01.tscn`, un nivel jugable de 1920 px con terreno destructible, plataformas, 10 enemigos, 4 prisioneros y una salida. Incluye sprites pixel art, fondo parallax, fuente pixel, screenshake, SFX y música en loop.
 
 **Objetivo:** avanzar hasta la bandera de salida. Rescatar prisioneros da una vida extra, 500 puntos y un nuevo checkpoint. Los enemigos dañan al contacto; el jugador muere de un golpe, tiene 3 vidas y reaparece en el último checkpoint.
 
@@ -143,3 +143,12 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Combate: rifle, escopeta, balas con pooling, daño, retroceso e hitstop.
 - [x] Enemigos, rescates, nivel jugable, HUD, victoria, game over y reinicio.
 - [x] Vertical slice jugable de principio a fin.
+- [x] Presentación: sprites pixel art, fondo parallax, fuente pixel y screenshake.
+- [x] Audio: SFX de combate/rescate/muerte/victoria y música de nivel.
+- [x] Nivel extendido a 1920 px con 10 enemigos y 4 POWs.
+
+## Créditos y licencias
+
+- **Fierce Soldier sprites** de Vircon32 (Carra), [OpenGameArt](https://opengameart.org/content/fierce-soldier-sprites), licencia **CC-BY 4.0**. Frames recortados y escalados; ver `assets/third_party/fierce_soldier/LICENSE.txt`.
+- **Press Start 2P** de Cody "CodeMan38" Boisclair, licencia **OFL**; ver `assets/fonts/OFL.txt`.
+- Tiles, fondos, POW, dummy, bala, bandera y audio generados para este proyecto.
