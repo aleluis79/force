@@ -81,3 +81,13 @@ func _make_world(enemy_scene: String, enemy_position: Vector2) -> Dictionary:
 func _wait_physics_frames(count: int) -> void:
 	for index in count:
 		await get_tree().physics_frame
+
+
+func test_grunt_faces_the_player_direction() -> void:
+	var setup := _make_world("res://scenes/grunt.tscn", Vector2(300, 200))
+	var grunt: Grunt = setup.enemy
+
+	await _wait_physics_frames(30)
+
+	var sprite := grunt.get_node("Sprite") as Sprite2D
+	assert_true(sprite.flip_h, "grunt must face left when chasing a player on its left")

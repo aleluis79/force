@@ -66,14 +66,10 @@ func _make_setup() -> Dictionary:
 	add_child_autofree(ground)
 
 	var input := ScriptedInputSource.new()
-	var player := Player.new()
+	var packed := load("res://scenes/player.tscn") as PackedScene
+	var player := packed.instantiate() as Player
 	player.position = PLAYER_START
 	player.input_source = input
-	var player_shape := CollisionShape2D.new()
-	var player_rect := RectangleShape2D.new()
-	player_rect.size = PLAYER_SIZE
-	player_shape.shape = player_rect
-	player.add_child(player_shape)
 	add_child_autoqfree(player)
 
 	return {"player": player, "input": input}
@@ -112,3 +108,33 @@ func test_player_respawn_restores_state_and_grants_invulnerability() -> void:
 
 	player.take_damage()
 	assert_true(player.alive, "invulnerability must ignore damage")
+
+
+func test_player_faces_the_movement_direction() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var sprite := player.get_node("Sprite") as Sprite2D
+	player.aim_direction = Vector2.RIGHT
+
+	input.move_axis = -1.0
+	player._update_sprite()
+	assert_true(sprite.flip_h, "moving left must flip the player sprite")
+
+	input.move_axis = 1.0
+	player._update_sprite()
+	assert_false(sprite.flip_h, "moving right must face right")
+
+
+func test_player_faces_the_aim_when_idle() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var sprite := player.get_node("Sprite") as Sprite2D
+	input.move_axis = 0.0
+	player.velocity = Vector2.ZERO
+	player.aim_direction = Vector2.LEFT
+
+	player._update_sprite()
+
+	assert_true(sprite.flip_h, "idle player must face the aim direction")

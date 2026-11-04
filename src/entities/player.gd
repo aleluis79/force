@@ -6,6 +6,10 @@ extends CharacterBody2D
 signal weapon_changed(stats: WeaponStats)
 signal died
 
+const MUZZLE_HEIGHT := -6.0
+const MUZZLE_FORWARD := 6.0
+const MUZZLE_EXTENSION := 10.0
+
 var input_source: InputSource
 var motion := PlayerMotion.new()
 var aim_direction := Vector2.RIGHT
@@ -100,7 +104,9 @@ func _fire() -> void:
 		return
 
 	var stats := weapon_state.stats
-	var muzzle_position := global_position + aim_direction * 12.0
+	var facing := 1.0 if aim_direction.x >= 0.0 else -1.0
+	var muzzle_origin := global_position + Vector2(MUZZLE_FORWARD * facing, MUZZLE_HEIGHT)
+	var muzzle_position := muzzle_origin + aim_direction * MUZZLE_EXTENSION
 	for direction in weapon_state.get_projectile_directions(aim_direction):
 		bullet_pool.spawn(muzzle_position, direction, stats, terrain)
 
@@ -120,4 +126,10 @@ func _update_sprite() -> void:
 	else:
 		_sprite.frame = 0
 
-	_sprite.flip_h = aim_direction.x < -0.01
+	var move_axis := input_source.get_move_axis()
+	if absf(move_axis) > 0.1:
+		_sprite.flip_h = move_axis < 0.0
+	elif absf(velocity.x) > 1.0:
+		_sprite.flip_h = velocity.x < 0.0
+	else:
+		_sprite.flip_h = aim_direction.x < -0.01

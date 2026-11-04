@@ -28,9 +28,10 @@ func _physics_process(delta: float) -> void:
 	if _player == null:
 		_player = get_tree().get_first_node_in_group("player") as Player
 
+	var facing_direction := 0.0
 	if _player != null and _player.alive:
-		var direction := signf(_player.global_position.x - global_position.x)
-		velocity.x = direction * SPEED
+		facing_direction = signf(_player.global_position.x - global_position.x)
+		velocity.x = facing_direction * SPEED
 		if global_position.distance_to(_player.global_position) < CONTACT_RANGE:
 			_player.take_damage()
 	else:
@@ -45,7 +46,7 @@ func _physics_process(delta: float) -> void:
 
 	if _sprite != null:
 		_sprite.frame = int(Time.get_ticks_msec() / 150) % 2
-		_sprite.flip_h = velocity.x < -0.1
+		_sprite.flip_h = facing_direction < -0.1
 
 
 func take_damage(amount: int) -> void:

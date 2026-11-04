@@ -85,3 +85,52 @@ func _make_combat_setup() -> Dictionary:
 func _wait_physics_frames(count: int) -> void:
 	for index in count:
 		await get_tree().physics_frame
+
+
+func test_bullets_spawn_from_the_gun_on_the_right() -> void:
+	var setup := _make_combat_setup()
+	var player: Player = setup.player
+	player.aim_direction = Vector2.RIGHT
+
+	player._fire()
+
+	var bullets := _visible_bullets(player)
+	assert_eq(bullets.size(), 1)
+	var bullet: Bullet = bullets[0]
+	assert_lt(bullet.global_position.y, player.global_position.y - 2.0)
+	assert_gt(bullet.global_position.x, player.global_position.x + 8.0)
+
+
+func test_bullets_spawn_from_the_gun_on_the_left() -> void:
+	var setup := _make_combat_setup()
+	var player: Player = setup.player
+	player.aim_direction = Vector2.LEFT
+
+	player._fire()
+
+	var bullets := _visible_bullets(player)
+	assert_eq(bullets.size(), 1)
+	var bullet: Bullet = bullets[0]
+	assert_lt(bullet.global_position.y, player.global_position.y - 2.0)
+	assert_lt(bullet.global_position.x, player.global_position.x - 8.0)
+
+
+func test_bullets_spawn_above_when_aiming_up() -> void:
+	var setup := _make_combat_setup()
+	var player: Player = setup.player
+	player.aim_direction = Vector2.UP
+
+	player._fire()
+
+	var bullets := _visible_bullets(player)
+	assert_eq(bullets.size(), 1)
+	var bullet: Bullet = bullets[0]
+	assert_lt(bullet.global_position.y, player.global_position.y - 10.0)
+
+
+func _visible_bullets(player: Player) -> Array:
+	var bullets := []
+	for child in player.bullet_pool.get_children():
+		if child is Bullet and child.visible:
+			bullets.append(child)
+	return bullets
