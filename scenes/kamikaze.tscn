@@ -16,4 +16,5 @@ shape = SubResource("CircleShape2D_kamikaze")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_kamikaze_tex")
+flip_h = true
 hframes = 2

@@ -46,7 +46,8 @@ func _physics_process(delta: float) -> void:
 
 	if _sprite != null:
 		_sprite.frame = int(Time.get_ticks_msec() / 150) % 2
-		_sprite.flip_h = facing_direction < -0.1
+		# The grunt art faces left by default.
+		_sprite.flip_h = facing_direction > 0.1
 
 
 func take_damage(amount: int) -> void:

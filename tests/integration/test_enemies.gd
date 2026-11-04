@@ -59,7 +59,11 @@ func test_enemy_death_emits_score() -> void:
 	assert_signal_emitted_with_parameters(grunt, "died", [100])
 
 
-func _make_world(enemy_scene: String, enemy_position: Vector2) -> Dictionary:
+func _make_world(
+	enemy_scene: String,
+	enemy_position: Vector2,
+	player_position: Vector2 = PLAYER_POSITION
+) -> Dictionary:
 	var terrain := DestructibleTerrain.new()
 	add_child_autoqfree(terrain)
 
@@ -67,7 +71,7 @@ func _make_world(enemy_scene: String, enemy_position: Vector2) -> Dictionary:
 	var player_packed := load("res://scenes/player.tscn") as PackedScene
 	var player := player_packed.instantiate() as Player
 	player.input_source = input
-	player.position = PLAYER_POSITION
+	player.position = player_position
 	add_child_autoqfree(player)
 
 	var enemy_packed := load(enemy_scene) as PackedScene
@@ -83,11 +87,34 @@ func _wait_physics_frames(count: int) -> void:
 		await get_tree().physics_frame
 
 
-func test_grunt_faces_the_player_direction() -> void:
+func test_grunt_faces_left_when_the_player_is_left() -> void:
 	var setup := _make_world("res://scenes/grunt.tscn", Vector2(300, 200))
 	var grunt: Grunt = setup.enemy
 
 	await _wait_physics_frames(30)
 
 	var sprite := grunt.get_node("Sprite") as Sprite2D
-	assert_true(sprite.flip_h, "grunt must face left when chasing a player on its left")
+	assert_false(sprite.flip_h, "grunt art faces left by default")
+
+
+func test_grunt_faces_right_when_the_player_is_right() -> void:
+	var setup := _make_world("res://scenes/grunt.tscn", Vector2(100, 200), Vector2(300, 200))
+	var grunt: Grunt = setup.enemy
+
+	await _wait_physics_frames(30)
+
+	var sprite := grunt.get_node("Sprite") as Sprite2D
+	assert_true(sprite.flip_h, "grunt must flip when chasing to the right")
+
+
+func test_kamikaze_faces_its_flight_direction() -> void:
+	var setup := _make_world("res://scenes/kamikaze.tscn", Vector2(300, 100))
+	var kamikaze: Kamikaze = setup.enemy
+	var player: Player = setup.player
+
+	await _wait_physics_frames(2)
+
+	var expected := (player.global_position - kamikaze.global_position).normalized().angle()
+	assert_almost_eq(kamikaze.rotation, expected, 0.2)
+	var sprite := kamikaze.get_node("Sprite") as Sprite2D
+	assert_true(sprite.flip_h, "missile art points left and must be flipped")
