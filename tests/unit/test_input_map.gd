@@ -10,6 +10,7 @@ const ACTIONS: Array[String] = [
 	"jump",
 	"shoot",
 	"special",
+	"crouch",
 	"pause",
 	"restart",
 ]
@@ -20,6 +21,7 @@ const KEYBOARD_OR_MOUSE_ACTIONS: Array[String] = [
 	"jump",
 	"shoot",
 	"special",
+	"crouch",
 	"pause",
 	"restart",
 ]

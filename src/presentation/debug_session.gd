@@ -74,7 +74,7 @@ func _on_shotgun_pressed() -> void:
 	player.set_weapon(WeaponStats.shotgun())
 
 
-func _on_hit_confirmed(_position: Vector2, _target: Node) -> void:
+func _on_hit_confirmed(_position: Vector2, _target: Node, _damage: int) -> void:
 	hit_stop.trigger(0.04)
 	AudioManager.play_sfx("hit")
 	var camera := player.get_node_or_null("Camera2D") as PlayerCamera

@@ -26,5 +26,9 @@ func was_shoot_just_pressed() -> bool:
 	return false
 
 
+func is_crouch_pressed() -> bool:
+	return false
+
+
 func get_aim_direction(_origin: Vector2, _pointer: Vector2) -> Vector2:
 	return Vector2.RIGHT

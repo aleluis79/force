@@ -8,6 +8,7 @@ var jump_just_pressed := false
 var jump_just_released := false
 var shoot_pressed := false
 var shoot_just_pressed := false
+var crouch_pressed := false
 var aim_direction := Vector2.RIGHT
 
 
@@ -29,6 +30,10 @@ func is_shoot_pressed() -> bool:
 
 func was_shoot_just_pressed() -> bool:
 	return shoot_just_pressed
+
+
+func is_crouch_pressed() -> bool:
+	return crouch_pressed
 
 
 func get_aim_direction(_origin: Vector2, _pointer: Vector2) -> Vector2:

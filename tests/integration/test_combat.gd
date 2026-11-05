@@ -34,6 +34,28 @@ func test_player_damages_the_training_dummy() -> void:
 	assert_lt(dummy.health.current, dummy.health.max_health, "bullet must damage the dummy")
 
 
+func test_bullet_reports_the_damage_it_applies() -> void:
+	var setup := _make_combat_setup()
+	var input: ScriptedInputSource = setup.input
+	var pool: BulletPool = setup.player.bullet_pool
+	watch_signals(pool)
+
+	input.aim_direction = Vector2.RIGHT
+	input.shoot_pressed = true
+	input.shoot_just_pressed = true
+	await _wait_physics_frames(3)
+	input.shoot_pressed = false
+	input.shoot_just_pressed = false
+
+	await _wait_physics_frames(30)
+
+	assert_signal_emitted(pool, "hit_confirmed")
+	var parameters = get_signal_parameters(pool, "hit_confirmed")
+	assert_not_null(parameters)
+	if parameters != null:
+		assert_eq(parameters[2], WeaponStats.rifle().damage)
+
+
 func test_bullet_destroys_terrain_on_impact() -> void:
 	var setup := _make_combat_setup()
 	var input: ScriptedInputSource = setup.input

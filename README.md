@@ -32,13 +32,14 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 
 La escena principal es `scenes/level_01.tscn`, un nivel jugable de 1920 px con terreno destructible, plataformas, 10 enemigos, 4 prisioneros y una salida. Incluye sprites pixel art, fondo parallax, fuente pixel, screenshake, SFX y música en loop.
 
-**Objetivo:** avanzar hasta la bandera de salida. Rescatar prisioneros da una vida extra, 500 puntos y un nuevo checkpoint. Los enemigos dañan al contacto; el jugador muere de un golpe, tiene 3 vidas y reaparece en el último checkpoint.
+**Objetivo:** avanzar hasta la bandera de salida. Rescatar prisioneros da una vida extra, 500 puntos y un nuevo checkpoint. Los soldados enemigos disparan proyectiles; el jugador puede agacharse para esquivarlos o destruirlos con sus balas. Tiene 3 vidas, una barra de salud y reaparece en el último checkpoint al quedarse sin salud.
 
 Controles:
 
 - **A/D o flechas** mueven al jugador.
 - **Espacio** salta (con coyote time y jump buffer).
-- **Ratón o stick derecho** apuntan en 360°; la cámara añade look-ahead.
+- **S o flecha abajo** se agacha para esquivar disparos altos.
+- **Ratón o stick derecho** apuntan en 360°; el arma rota con el apuntado y la cámara añade look-ahead.
 - **Clic izquierdo o RT** dispara el rifle.
 - **Esc** pausa o reanuda la partida.
 - **R** reinicia el nivel con 3 vidas y 0 puntos.
@@ -142,6 +143,7 @@ Durante `apply`, cada task se implementa con ciclo TDD:
 - [x] Terreno destructible: celdas de 8 px, explosiones, tiles y colisión.
 - [x] Combate: rifle, escopeta, balas con pooling, daño, retroceso e hitstop.
 - [x] Enemigos, rescates, nivel jugable, HUD, victoria, game over y reinicio.
+- [x] Supervivencia: enemigos a distancia, agacharse, proyectiles destructibles y barra de salud.
 - [x] Vertical slice jugable de principio a fin.
 - [x] Presentación: sprites pixel art, fondo parallax, fuente pixel y screenshake.
 - [x] Audio: SFX de combate/rescate/muerte/victoria y música de nivel.

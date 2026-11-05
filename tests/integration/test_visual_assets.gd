@@ -22,6 +22,18 @@ func test_actor_scenes_have_sprite_textures() -> void:
 		node.free()
 
 
+func test_player_has_a_separate_weapon_sprite() -> void:
+	var packed := load("res://scenes/player.tscn") as PackedScene
+	var player := packed.instantiate()
+	var weapon := player.get_node_or_null("WeaponPivot/Weapon") as Sprite2D
+
+	assert_not_null(weapon, "player must have a rotating weapon sprite")
+	if weapon != null:
+		assert_not_null(weapon.texture, "weapon sprite must have a texture")
+		assert_eq(weapon.hframes, 6, "weapon must follow the body animation frames")
+	player.free()
+
+
 func test_background_has_three_parallax_layers() -> void:
 	var packed := load("res://scenes/background.tscn") as PackedScene
 	assert_not_null(packed)

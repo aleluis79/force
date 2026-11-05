@@ -1,18 +1,26 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://src/level/level.gd" id="1_level"]
 [ext_resource type="Script" path="res://src/presentation/session_controller.gd" id="2_controller"]
 [ext_resource type="Script" path="res://src/presentation/hit_stop.gd" id="3_hitstop"]
 [ext_resource type="Script" path="res://src/world/destructible_terrain.gd" id="4_terrain"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5_player"]
-[ext_resource type="PackedScene" path="res://scenes/grunt.tscn" id="6_grunt"]
-[ext_resource type="PackedScene" path="res://scenes/kamikaze.tscn" id="7_kamikaze"]
-[ext_resource type="PackedScene" path="res://scenes/pow.tscn" id="8_pow"]
 [ext_resource type="PackedScene" path="res://scenes/background.tscn" id="9_background"]
 [ext_resource type="Texture2D" path="res://assets/sprites/palm.png" id="10_palm"]
 [ext_resource type="Texture2D" path="res://assets/sprites/bush.png" id="11_bush"]
 [ext_resource type="Texture2D" path="res://assets/sprites/plant.png" id="12_plant"]
 [ext_resource type="Texture2D" path="res://assets/sprites/flag.png" id="13_flag"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_bg"]
+bg_color = Color(0.0509804, 0.0509804, 0.0705882, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.85098, 0.239216, 0.180392, 1)
 
 [node name="Level" type="Node2D"]
 script = ExtResource("1_level")
@@ -85,53 +93,62 @@ position = Vector2(1400, 214)
 z_index = -4
 texture = ExtResource("12_plant")
 
+[node name="Palm5" type="Sprite2D" parent="."]
+position = Vector2(2400, 184)
+z_index = -5
+modulate = Color(0.65, 0.75, 0.65, 1)
+texture = ExtResource("10_palm")
+
+[node name="Palm6" type="Sprite2D" parent="."]
+position = Vector2(3100, 184)
+z_index = -5
+modulate = Color(0.65, 0.75, 0.65, 1)
+texture = ExtResource("10_palm")
+
+[node name="Palm7" type="Sprite2D" parent="."]
+position = Vector2(3700, 184)
+z_index = -5
+modulate = Color(0.65, 0.75, 0.65, 1)
+texture = ExtResource("10_palm")
+
+[node name="Bush4" type="Sprite2D" parent="."]
+position = Vector2(2200, 209)
+z_index = -4
+modulate = Color(0.7, 0.8, 0.7, 1)
+texture = ExtResource("11_bush")
+
+[node name="Bush5" type="Sprite2D" parent="."]
+position = Vector2(2900, 209)
+z_index = -4
+modulate = Color(0.7, 0.8, 0.7, 1)
+texture = ExtResource("11_bush")
+
+[node name="Bush6" type="Sprite2D" parent="."]
+position = Vector2(3500, 209)
+z_index = -4
+modulate = Color(0.7, 0.8, 0.7, 1)
+texture = ExtResource("11_bush")
+
+[node name="Plant4" type="Sprite2D" parent="."]
+position = Vector2(2000, 214)
+z_index = -4
+texture = ExtResource("12_plant")
+
+[node name="Plant5" type="Sprite2D" parent="."]
+position = Vector2(2700, 214)
+z_index = -4
+texture = ExtResource("12_plant")
+
+[node name="Plant6" type="Sprite2D" parent="."]
+position = Vector2(3350, 214)
+z_index = -4
+texture = ExtResource("12_plant")
+
 [node name="Player" parent="." instance=ExtResource("5_player")]
 position = Vector2(80, 200)
 
-[node name="Grunt1" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(300, 200)
-
-[node name="Grunt2" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(500, 200)
-
-[node name="Grunt3" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(700, 200)
-
-[node name="Grunt4" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(1000, 200)
-
-[node name="Grunt5" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(1300, 200)
-
-[node name="Grunt6" parent="." instance=ExtResource("6_grunt")]
-position = Vector2(1650, 200)
-
-[node name="Kamikaze1" parent="." instance=ExtResource("7_kamikaze")]
-position = Vector2(400, 120)
-
-[node name="Kamikaze2" parent="." instance=ExtResource("7_kamikaze")]
-position = Vector2(620, 100)
-
-[node name="Kamikaze3" parent="." instance=ExtResource("7_kamikaze")]
-position = Vector2(1100, 110)
-
-[node name="Kamikaze4" parent="." instance=ExtResource("7_kamikaze")]
-position = Vector2(1500, 120)
-
-[node name="Pow1" parent="." instance=ExtResource("8_pow")]
-position = Vector2(450, 210)
-
-[node name="Pow2" parent="." instance=ExtResource("8_pow")]
-position = Vector2(850, 210)
-
-[node name="Pow3" parent="." instance=ExtResource("8_pow")]
-position = Vector2(1250, 210)
-
-[node name="Pow4" parent="." instance=ExtResource("8_pow")]
-position = Vector2(1700, 210)
-
 [node name="Exit" type="Node2D" parent="."]
-position = Vector2(1840, 200)
+position = Vector2(3784, 200)
 
 [node name="Sprite" type="Sprite2D" parent="Exit"]
 position = Vector2(0, 8)
@@ -159,6 +176,24 @@ offset_top = 70.0
 offset_right = 220.0
 offset_bottom = 94.0
 text = "Weapon: Rifle"
+
+[node name="HealthLabel" type="Label" parent="UI"]
+offset_left = 330.0
+offset_top = 18.0
+offset_right = 352.0
+offset_bottom = 42.0
+text = "HP"
+
+[node name="HealthBar" type="ProgressBar" parent="UI"]
+offset_left = 356.0
+offset_top = 20.0
+offset_right = 456.0
+offset_bottom = 31.0
+max_value = 100
+value = 100
+show_percentage = false
+theme_override_styles/background = SubResource("StyleBoxFlat_health_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
 
 [node name="MessageLabel" type="Label" parent="UI"]
 offset_left = 0.0

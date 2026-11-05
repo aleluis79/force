@@ -7,6 +7,7 @@ signal died(points: int)
 
 const SPEED := 70.0
 const CONTACT_RANGE := 14.0
+const CONTACT_DAMAGE := 35
 
 @export var score_value := 150
 
@@ -41,12 +42,15 @@ func _physics_process(delta: float) -> void:
 	global_position += direction * SPEED * delta
 
 	if global_position.distance_to(_player.global_position) < CONTACT_RANGE:
-		_player.take_damage()
+		_player.take_damage(CONTACT_DAMAGE)
 		_on_died()
 
 
-func take_damage(amount: int) -> void:
-	health.damage(amount)
+func take_damage(amount: int) -> int:
+	var applied := health.damage(amount)
+	if applied > 0:
+		HitFlash.play(self, _sprite)
+	return applied
 
 
 func _on_died() -> void:

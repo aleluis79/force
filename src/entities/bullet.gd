@@ -4,9 +4,11 @@ extends Node2D
 ## Projectile with deterministic terrain checks and a raycast for targets.
 
 signal finished(bullet)
-signal hit_target(target: Node, position: Vector2)
+signal hit_target(target: Node, position: Vector2, damage: int)
 
-const TARGET_COLLISION_MASK := 2
+const ENEMY_LAYER := 2
+const ENEMY_PROJECTILE_LAYER := 4
+const TARGET_COLLISION_MASK := ENEMY_LAYER | ENEMY_PROJECTILE_LAYER
 const TEXTURE := preload("res://assets/sprites/bullet.png")
 
 var direction := Vector2.RIGHT
@@ -64,8 +66,8 @@ func _physics_process(delta: float) -> void:
 	if not hit.is_empty():
 		var target: Node = hit.collider
 		if target.has_method("take_damage"):
-			target.take_damage(damage)
-			hit_target.emit(target, hit.position)
+			var applied: Variant = target.take_damage(damage)
+			hit_target.emit(target, hit.position, applied if applied is int else damage)
 		_finish()
 		return
 

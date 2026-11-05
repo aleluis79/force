@@ -80,24 +80,205 @@ func _wait_physics_frames(count: int) -> void:
 		await get_tree().physics_frame
 
 
+func test_weapon_pivot_follows_the_aim_direction() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var pivot := player.get_node("WeaponPivot") as Node2D
+
+	player.aim_direction = Vector2.RIGHT
+	player._update_weapon()
+	assert_almost_eq(pivot.rotation, 0.0, 0.01)
+	assert_gt(pivot.position.x, 0.0)
+	assert_eq(pivot.scale.y, 1.0)
+
+	player.aim_direction = Vector2.UP
+	player._update_weapon()
+	assert_almost_eq(pivot.rotation, -PI / 2.0, 0.01)
+
+	player.aim_direction = Vector2.LEFT
+	player._update_weapon()
+	assert_almost_eq(pivot.rotation, PI, 0.01)
+	assert_lt(pivot.position.x, 0.0)
+	assert_eq(pivot.scale.y, -1.0, "left aim must mirror the arm vertically")
+
+
+func test_weapon_frame_matches_the_body_animation() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var body := player.get_node("Sprite") as Sprite2D
+	var weapon := player.get_node("WeaponPivot/Weapon") as Sprite2D
+
+	input.move_axis = 1.0
+	player.velocity = Vector2(50, 0)
+	player._update_sprite()
+	player._update_weapon()
+
+	assert_eq(weapon.frame, body.frame)
+
+
+func test_player_starts_with_full_health() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+
+	assert_eq(player.health.max_health, 100)
+	assert_eq(player.health.current, 100)
+
+
+func test_player_takes_damage_without_dying() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	watch_signals(player)
+
+	var applied := player.take_damage(25)
+
+	assert_eq(applied, 25)
+	assert_eq(player.health.current, 75)
+	assert_true(player.alive, "non-lethal damage must not kill the player")
+	assert_signal_emitted_with_parameters(player, "health_changed", [75, 100])
+
+
+func test_player_dies_when_health_reaches_zero() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	watch_signals(player)
+
+	player.take_damage(player.health.max_health)
+
+	assert_false(player.alive)
+	assert_eq(player.health.current, 0)
+	assert_signal_emit_count(player, "died", 1)
+
+
+func test_player_ignores_damage_during_hit_invulnerability() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+
+	player.take_damage(25)
+	player.take_damage(25)
+
+	assert_eq(player.health.current, 75, "only the first hit must apply damage")
+	assert_true(player.invulnerable)
+
+
+func test_player_can_be_damaged_again_after_invulnerability() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+
+	player.take_damage(25)
+	await get_tree().create_timer(0.7).timeout
+	assert_false(player.invulnerable)
+	player.take_damage(25)
+
+	assert_eq(player.health.current, 50)
+
+
+func test_player_respawn_restores_full_health() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+
+	player.take_damage(40)
+	player.take_damage(player.health.max_health)
+	player.respawn(Vector2(50, 50))
+
+	assert_eq(player.health.current, player.health.max_health)
+
+
+func test_player_crouches_and_reduces_collision_height() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var collision := player.get_node("CollisionShape2D") as CollisionShape2D
+	var stand_height := (collision.shape as RectangleShape2D).size.y
+
+	await _wait_physics_frames(60)
+	input.crouch_pressed = true
+	await _wait_physics_frames(2)
+
+	var crouch_height := (collision.shape as RectangleShape2D).size.y
+
+	assert_true(player.crouching)
+	assert_lt(crouch_height, stand_height, "crouching must reduce the collision height")
+	assert_almost_eq(
+		collision.position.y + crouch_height * 0.5,
+		14.0,
+		0.01,
+		"crouching must keep the player's feet at the same height"
+	)
+
+
+func test_player_stands_up_when_crouch_is_released() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var collision := player.get_node("CollisionShape2D") as CollisionShape2D
+	var stand_height := (collision.shape as RectangleShape2D).size.y
+
+	await _wait_physics_frames(60)
+	input.crouch_pressed = true
+	await _wait_physics_frames(2)
+	input.crouch_pressed = false
+	await _wait_physics_frames(2)
+
+	assert_false(player.crouching)
+	assert_eq((collision.shape as RectangleShape2D).size.y, stand_height)
+	assert_eq(collision.position, Vector2.ZERO)
+
+
+func test_crouching_reduces_horizontal_speed() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+
+	await _wait_physics_frames(60)
+	input.move_axis = 1.0
+	await _wait_physics_frames(30)
+	var standing_speed := absf(player.velocity.x)
+
+	input.crouch_pressed = true
+	await _wait_physics_frames(10)
+
+	assert_lt(absf(player.velocity.x), standing_speed, "crouching must reduce horizontal speed")
+
+
+func test_player_uses_a_dedicated_crouch_texture() -> void:
+	var setup := _make_setup()
+	var player: Player = setup.player
+	var input: ScriptedInputSource = setup.input
+	var sprite := player.get_node("Sprite") as Sprite2D
+	var stand_texture := sprite.texture
+
+	await _wait_physics_frames(60)
+	input.crouch_pressed = true
+	await _wait_physics_frames(2)
+
+	assert_ne(sprite.texture, stand_texture, "crouching must switch to its own texture")
+	assert_eq(sprite.scale, Vector2.ONE, "crouching must not squash the sprite")
+
+	input.crouch_pressed = false
+	await _wait_physics_frames(2)
+
+	assert_eq(sprite.texture, stand_texture)
+
+
 func test_player_dies_once_and_emits_signal() -> void:
 	var setup := _make_setup()
 	var player: Player = setup.player
 	watch_signals(player)
 
-	player.take_damage()
+	player.take_damage(player.health.max_health)
 	assert_false(player.alive)
 	assert_false(player.visible)
 	assert_signal_emit_count(player, "died", 1)
 
-	player.take_damage()
+	player.take_damage(player.health.max_health)
 	assert_signal_emit_count(player, "died", 1, "death must only be emitted once")
 
 
 func test_player_respawn_restores_state_and_grants_invulnerability() -> void:
 	var setup := _make_setup()
 	var player: Player = setup.player
-	player.take_damage()
+	player.take_damage(player.health.max_health)
 
 	player.respawn(Vector2(50, 50))
 
@@ -106,7 +287,7 @@ func test_player_respawn_restores_state_and_grants_invulnerability() -> void:
 	assert_true(player.invulnerable)
 	assert_eq(player.global_position, Vector2(50, 50))
 
-	player.take_damage()
+	player.take_damage(player.health.max_health)
 	assert_true(player.alive, "invulnerability must ignore damage")
 
 

@@ -57,6 +57,20 @@ El HUD DEBE (MUST) usar una fuente pixel y un tema global legible a la resoluci�
 - **WHEN** se inicia el proyecto
 - **THEN** el tema global usa la fuente pixel y un tamaño legible
 
+### Requirement: Arma orientada al apuntado
+
+El sprite del arma del jugador DEBE (MUST) rotar alrededor del hombro para acompañar la dirección de apuntado y DEBE (MUST) mantenerse alineado con la animación del cuerpo. Las balas DEBEN (MUST) originarse en la boca del arma visible.
+
+#### Scenario: Apuntado en 360°
+
+- **WHEN** el jugador apunta en cualquier dirección
+- **THEN** el arma rota hacia esa dirección y las balas salen desde su boca
+
+#### Scenario: Apuntado hacia la izquierda
+
+- **WHEN** el jugador apunta a la izquierda
+- **THEN** el arma se coloca en el hombro izquierdo y se voltea para no quedar boca abajo
+
 ### Requirement: Screenshake
 
 La cámara DEBE (MUST) sacudirse brevemente al confirmar impactos y explosiones.

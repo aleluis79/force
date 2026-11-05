@@ -3,7 +3,7 @@ extends Node2D
 
 ## Reuses Bullet instances and re-emits target hits for presentation feedback.
 
-signal hit_confirmed(position: Vector2, target: Node)
+signal hit_confirmed(position: Vector2, target: Node, damage: int)
 
 @export var max_active := 64
 
@@ -53,5 +53,5 @@ func _on_bullet_finished(bullet: Bullet) -> void:
 		_inactive.append(bullet)
 
 
-func _on_bullet_hit_target(target: Node, position: Vector2) -> void:
-	hit_confirmed.emit(position, target)
+func _on_bullet_hit_target(target: Node, position: Vector2, damage: int) -> void:
+	hit_confirmed.emit(position, target, damage)

@@ -7,6 +7,7 @@ func test_base_source_is_neutral() -> void:
 	assert_eq(source.get_move_axis(), 0.0)
 	assert_false(source.was_jump_just_pressed())
 	assert_false(source.was_jump_just_released())
+	assert_false(source.is_crouch_pressed())
 	assert_eq(source.get_aim_direction(Vector2.ZERO, Vector2.ZERO), Vector2.RIGHT)
 
 
@@ -45,3 +46,14 @@ func test_local_source_prefers_the_stick_over_the_pointer() -> void:
 	Input.action_release("aim_left")
 
 	assert_lt(aim.x, 0.0, "stick input must override the pointer")
+
+
+func test_local_source_reads_the_crouch_action() -> void:
+	var source := LocalInputSource.new()
+
+	Input.action_press("crouch")
+	var pressed := source.is_crouch_pressed()
+	Input.action_release("crouch")
+
+	assert_true(pressed)
+	assert_false(source.is_crouch_pressed())
