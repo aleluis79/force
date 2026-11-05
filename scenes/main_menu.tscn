@@ -1,0 +1,148 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/presentation/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/background.tscn" id="2_background"]
+[ext_resource type="Theme" path="res://assets/theme/game_theme.tres" id="3_theme"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_menu")
+
+[node name="Background" parent="." instance=ExtResource("2_background")]
+
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0313726, 0.0392157, 0.0588235, 0.62)
+
+[node name="MainCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPanel" type="VBoxContainer" parent="MainCenter"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+theme_override_constants/separation = 9
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="MainCenter/MainPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 0.92, 0.35, 1)
+horizontal_alignment = 1
+text = "FORCE"
+
+[node name="SubtitleLabel" type="Label" parent="MainCenter/MainPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.8, 0.65, 1)
+horizontal_alignment = 1
+text = "RUN-AND-GUN ARCADE"
+
+[node name="PlayButton" type="Button" parent="MainCenter/MainPanel"]
+custom_minimum_size = Vector2(200, 26)
+layout_mode = 2
+text = "JUGAR"
+
+[node name="OptionsButton" type="Button" parent="MainCenter/MainPanel"]
+custom_minimum_size = Vector2(200, 26)
+layout_mode = 2
+text = "OPCIONES"
+
+[node name="ControlsButton" type="Button" parent="MainCenter/MainPanel"]
+custom_minimum_size = Vector2(200, 26)
+layout_mode = 2
+text = "CONTROLES"
+
+[node name="QuitButton" type="Button" parent="MainCenter/MainPanel"]
+custom_minimum_size = Vector2(200, 26)
+layout_mode = 2
+text = "SALIR"
+
+[node name="OptionsCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OptionsPanel" type="VBoxContainer" parent="OptionsCenter"]
+visible = false
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="OptionsTitle" type="Label" parent="OptionsCenter/OptionsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.92, 0.35, 1)
+horizontal_alignment = 1
+text = "OPCIONES"
+
+[node name="FullscreenButton" type="Button" parent="OptionsCenter/OptionsPanel"]
+custom_minimum_size = Vector2(240, 26)
+layout_mode = 2
+text = "PANTALLA COMPLETA: NO"
+
+[node name="VolumeButton" type="Button" parent="OptionsCenter/OptionsPanel"]
+custom_minimum_size = Vector2(240, 26)
+layout_mode = 2
+text = "VOLUMEN: 100%"
+
+[node name="OptionsBackButton" type="Button" parent="OptionsCenter/OptionsPanel"]
+custom_minimum_size = Vector2(240, 26)
+layout_mode = 2
+text = "VOLVER"
+
+[node name="ControlsCenter" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ControlsPanel" type="VBoxContainer" parent="ControlsCenter"]
+visible = false
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="ControlsTitle" type="Label" parent="ControlsCenter/ControlsPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.92, 0.35, 1)
+horizontal_alignment = 1
+text = "CONTROLES"
+
+[node name="ControlsText" type="Label" parent="ControlsCenter/ControlsPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.88, 0.82, 1)
+horizontal_alignment = 1
+text = "A/D — MOVER
+ESPACIO — SALTAR
+S / ABAJO — AGACHARSE
+CLIC IZQ — DISPARAR
+ESC — PAUSA"
+
+[node name="ControlsBackButton" type="Button" parent="ControlsCenter/ControlsPanel"]
+custom_minimum_size = Vector2(240, 26)
+layout_mode = 2
+text = "VOLVER"

@@ -30,7 +30,7 @@ También puedes abrir `project.godot` desde el gestor de proyectos de Godot.
 /home/alejandro/godot/Godot_v4.7.2-stable_linux.x86_64 --path .
 ```
 
-La escena principal es `scenes/level_01.tscn`, un nivel jugable de 1920 px con terreno destructible, plataformas, 10 enemigos, 4 prisioneros y una salida. Incluye sprites pixel art, fondo parallax, fuente pixel, screenshake, SFX y música en loop.
+El juego arranca en `scenes/main_menu.tscn`, con opciones **Jugar**, **Opciones**, **Controles** y **Salir**. Desde el menú se puede alternar pantalla completa, cambiar el volumen maestro y consultar los controles. **Jugar** carga `scenes/level_01.tscn`, un nivel jugable de 3840 px con terreno destructible, plataformas, 40 enemigos, 8 prisioneros y una salida. Incluye sprites pixel art, fondo parallax, fuente pixel, screenshake, SFX y música en loop.
 
 **Objetivo:** avanzar hasta la bandera de salida. Rescatar prisioneros da una vida extra, 500 puntos y un nuevo checkpoint. Los soldados enemigos disparan proyectiles; el jugador puede agacharse para esquivarlos o destruirlos con sus balas. Tiene 3 vidas, una barra de salud y reaparece en el último checkpoint al quedarse sin salud.
 
@@ -43,6 +43,8 @@ Controles:
 - **Clic izquierdo o RT** dispara el rifle.
 - **Esc** pausa o reanuda la partida.
 - **R** reinicia el nivel con 3 vidas y 0 puntos.
+
+En el menú inicial se navega con **flechas o gamepad**, se confirma con **Enter/A** y se vuelve con **Esc**.
 
 `scenes/debug_session.tscn` se conserva como banco de pruebas: dummy, botones **Rifle**/**Shotgun**, **Lose life**, **Add 100**, **Restart** y **Explode**. `scenes/bootstrap.tscn` sigue siendo el fixture del smoke test de la fundación.
 

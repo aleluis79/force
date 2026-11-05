@@ -82,11 +82,11 @@ func test_physics_runs_at_60_ticks() -> void:
 	)
 
 
-func test_main_scene_is_level_01() -> void:
+func test_main_scene_is_main_menu() -> void:
 	assert_eq(
 		ProjectSettings.get_setting("application/run/main_scene"),
-		"res://scenes/level_01.tscn",
-		"main scene must be the playable level"
+		"res://scenes/main_menu.tscn",
+		"main scene must be the initial menu"
 	)
 
 
